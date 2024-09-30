@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Self Driving car in JS</title>
+  </head>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+  <body>
+    <canvas id="myCanvas"></canvas>
+
+    <script>
+      myCanvas.width = window.innerWidth;
+      myCanvas.height = window.innerHeight;
+
+      const A = { x: 200, y: 150 };
+      const B = { x: 150, y: 250 };
+      const C = { x: 50, y: 100 };
+      const D = { x: 250, y: 200 };
+
+      const ctx = myCanvas.getContext("2d");
+
+      animate();
+
+      function animate() {
+        ctx.reset();
+        ctx.beginPath();
+        ctx.moveTo(A.x, A.y);
+        ctx.lineTo(B.x, B.y);
+        ctx.moveTo(C.x, C.y);
+        ctx.lineTo(D.x, D.y);
+        ctx.stroke();
+
+        drawCircle("A", A);
+        drawCircle("B", B);
+        drawCircle("C", C);
+        drawCircle("D", D);
+
+        // to get the midpoint of a segment
+        const M = {
+          x: lerp(A.x, B.x, t),
+          y: lerp(A.y, B.y, t),
+        };
+        const N = {
+          x: lerp(C.x, D.x, t),
+          y: lerp(C.y, D.y, t),
+        };
+
+        drawCircle("I", getIntersection(A, B, C, D));
+
+        requestAnimationFrame(animate);
+      }
+
+      function getIntersection(A, B, C, D) {
+        /*
+        Ix = Ax+(Bx-Ax)t = Cx+(Dx-Cx)u
+        Iy = Ay+(By-Ay)t = Cy+(Dy-Cy)u
+        */
+
+        const top = (D.x - C.x) * (A.y - C.y) - (D.y - C.y) * (A.x - C.x);
+        const bottom = (D.y - C.y) * (B.x - A.x) - (D.x - C.x) * (B.y - A.y);
+
+        const t = top / bottom;
+
+        return {
+          x: lerp(A.x, B.x, t),
+          y: lerp(A.y, B.y, t),
+        };
+      }
+
+      function lerp(A, B, t) {
+        return A + (B - A) * t;
+      }
+
+      function drawCircle(label, point, isRed) {
+        ctx.beginPath();
+        ctx.fillStyle = isRed ? "red" : "white";
+        ctx.arc(point.x, point.y, 10, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = "black";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.font = "bold 12px Arial";
+        ctx.fillText(label, point.x, point.y);
+      }
+    </script>
+  </body>
+</html>
