@@ -3,10 +3,15 @@
   <head>
     <title>World Editor</title>
   </head>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
   <body>
     <h1>World Editor</h1>
     <canvas id="myCanvas"></canvas>
+    <div id="controls">
+      <button onclick="addRandomPoint()">Add point</button>
+      <button onclick="addRandomSegment()">Add Segment</button>
+      <button onclick="reset()">Clear All</button>
+    </div>
 
     <script src="js/math/primitives/point.js"></script>
     <script src="js/math/primitives/segment.js"></script>
@@ -24,17 +29,46 @@
         new Point(200, 100),
         new Point(300, 100),
         new Point(50, 100),
-      ]
+      ];
 
       const segments = [
-        new Segment(points[0],points[2]),
-        new Segment(points[0],points[3]),
-        new Segment(points[1],points[3]),
-      ]
+        new Segment(points[0], points[2]),
+        new Segment(points[0], points[3]),
+        new Segment(points[1], points[3]),
+      ];
 
       const graph = new Graph(points, segments);
+      animate();
 
-      graph.draw(ctx);
+      function animate() {
+        ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
+
+        graph.draw(ctx);
+
+        requestAnimationFrame(animate);
+      }
+
+      function addRandomPoint() {
+        const point = new Point(
+          Math.random() * myCanvas.width,
+          Math.random() * myCanvas.height
+        );
+
+        graph.addPoint(point);
+      }
+      
+      function addRandomSegment() {
+        const p1 = graph.points[Math.floor(Math.random() * graph.points.length)]
+        const p2 = graph.points[Math.floor(Math.random() * graph.points.length)]
+        
+        const segment = new Segment(p1, p2);
+
+        graph.addSegment(segment);
+      }
+
+      function reset() {
+        graph.reset();
+      }
     </script>
   </body>
 </html>

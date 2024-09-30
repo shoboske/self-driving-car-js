@@ -13,4 +13,17 @@ class Graph {
       point.draw(ctx);
     }
   }
+
+  addPoint(point){
+    this.points.push(point);
+  } 
+  
+  addSegment(segment){
+    this.segments.push(segment);
+  }
+
+  reset(){
+    this.points.length = 0;
+    this.segments.length = 0;
+  }
 }
