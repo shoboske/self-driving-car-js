@@ -14,15 +14,41 @@ class Graph {
     }
   }
 
-  addPoint(point){
+  addPoint(point) {
     this.points.push(point);
-  } 
-  
-  addSegment(segment){
+  }
+
+  addSegment(segment) {
     this.segments.push(segment);
   }
 
-  reset(){
+  tryAddSegment(segment) {
+    const index = this.segments.findIndex(
+      (s) =>
+        (s.p1.equals(segment.p1) && s.p2.equals(segment.p2)) ||
+        (s.p2.equals(segment.p1) && s.p1.equals(segment.p2))
+    );
+
+    if (index > -1) {
+      return false;
+    }
+
+    this.addSegment(segment);
+    return true;
+  }
+
+  tryAddPoint(point) {
+    const index = this.points.findIndex((p) => p.equals(point));
+
+    if (index > -1) {
+      return false;
+    }
+
+    this.addPoint(point);
+    return true;
+  }
+
+  reset() {
     this.points.length = 0;
     this.segments.length = 0;
   }

@@ -11,4 +11,8 @@ class Point {
     ctx.fill();
     ctx.stroke();
   }
+
+  equals(point) {
+    return this.x == point.x && this.y == point.y;
+  }
 }
