@@ -10,6 +10,8 @@
     <div id="controls">
       <button onclick="addRandomPoint()">Add point</button>
       <button onclick="addRandomSegment()">Add Segment</button>
+      <button onclick="removeRandomPoint()">Remove Point</button>
+      <button onclick="removeRandomSegment()">Remove Segment</button>
       <button onclick="reset()">Clear All</button>
     </div>
 
@@ -17,8 +19,8 @@
     <script src="js/math/primitives/segment.js"></script>
     <script src="js/math/graph.js"></script>
     <script>
-      myCanvas.width = 400;
-      myCanvas.height = 400;
+      myCanvas.width = 500;
+      myCanvas.height = 500;
 
       const ctx = myCanvas.getContext("2d");
 
@@ -57,14 +59,32 @@
 
         graph.tryAddPoint(point);
       }
-      
+
       function addRandomSegment() {
-        const p1 = graph.points[Math.floor(Math.random() * graph.points.length)]
-        const p2 = graph.points[Math.floor(Math.random() * graph.points.length)]
-        
+        const p1 =
+          graph.points[Math.floor(Math.random() * graph.points.length)];
+        const p2 =
+          graph.points[Math.floor(Math.random() * graph.points.length)];
+
         const segment = new Segment(p1, p2);
 
         graph.tryAddSegment(segment);
+      }
+
+      function removeRandomSegment() {
+        if (graph.segments.length == 0) {
+            console.warn("No Segments");
+        }
+
+        graph.removeSegment(graph.segments[Math.floor(Math.random() * graph.segments.length)]);
+      }
+
+      function removeRandomPoint() {
+        if (graph.points.length == 0) {
+            console.warn("No Points");
+        }
+
+        graph.removePoint(graph.points[Math.floor(Math.random() * graph.points.length)]);
       }
 
       function reset() {
