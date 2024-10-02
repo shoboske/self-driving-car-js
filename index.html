@@ -18,6 +18,8 @@
     <script src="js/math/primitives/point.js"></script>
     <script src="js/math/primitives/segment.js"></script>
     <script src="js/math/graph.js"></script>
+    <script src="js/math/utils.js"></script>
+    <script src="js/graphEditor.js"></script>
     <script>
       myCanvas.width = 500;
       myCanvas.height = 500;
@@ -40,13 +42,14 @@
       ];
 
       const graph = new Graph(points, segments);
+      const graphEditor = new GraphEditor(myCanvas, graph);
 
       animate();
 
       function animate() {
         ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
 
-        graph.draw(ctx);
+        graphEditor.display();
 
         requestAnimationFrame(animate);
       }
@@ -73,18 +76,22 @@
 
       function removeRandomSegment() {
         if (graph.segments.length == 0) {
-            console.warn("No Segments");
+          console.warn("No Segments");
         }
 
-        graph.removeSegment(graph.segments[Math.floor(Math.random() * graph.segments.length)]);
+        graph.removeSegment(
+          graph.segments[Math.floor(Math.random() * graph.segments.length)]
+        );
       }
 
       function removeRandomPoint() {
         if (graph.points.length == 0) {
-            console.warn("No Points");
+          console.warn("No Points");
         }
 
-        graph.removePoint(graph.points[Math.floor(Math.random() * graph.points.length)]);
+        graph.removePoint(
+          graph.points[Math.floor(Math.random() * graph.points.length)]
+        );
       }
 
       function reset() {
