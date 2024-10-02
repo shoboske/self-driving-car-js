@@ -5,6 +5,8 @@ class GraphEditor {
     this.context = canvas.getContext("2d");
     this.selected = null;
     this.hovered = null;
+    this.dragging = false;
+    this.metaKeyActive = false;
 
     this.#addEventListeners();
   }
@@ -16,6 +18,10 @@ class GraphEditor {
         if (this.hovered) {
           this.#removePoint(this.hovered);
         }
+      }
+
+      if (event.button == 1 || (event.button == 0 && this.metaKeyActive)) {
+        this.dragging = true;
       }
 
       if (event.button == 0) {
@@ -33,14 +39,36 @@ class GraphEditor {
       }
     });
 
+    this.canvas.addEventListener("mouseup", (event) => {
+      if (event.button == 1 || event.button == 0) {
+        this.dragging = false;
+      }
+    });
+
     this.canvas.addEventListener("mousemove", (event) => {
       const mouse = new Point(event.offsetX, event.offsetY);
       this.hovered = getNearestPoint(mouse, this.graph.points, 15);
+      if (this.dragging && this.selected) {
+        this.selected.x = mouse.x;
+        this.selected.y = mouse.y;
+      }
     });
 
     this.canvas.addEventListener("contextmenu", (event) =>
       event.preventDefault()
     );
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Meta") {
+        this.metaKeyActive = true;
+      }
+    });
+
+    document.addEventListener("keyup", (event) => {
+      if (event.key === "Meta") {
+        this.metaKeyActive = false;
+      }
+    });
   }
 
   #removePoint(point) {
@@ -48,6 +76,7 @@ class GraphEditor {
     this.hovered = null;
     this.selected = null;
   }
+
   display() {
     this.graph.draw(this.context);
 
