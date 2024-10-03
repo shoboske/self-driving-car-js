@@ -19,6 +19,7 @@
     <script src="js/math/primitives/segment.js"></script>
     <script src="js/math/graph.js"></script>
     <script src="js/math/utils.js"></script>
+    <script src="js/viewPort.js"></script>
     <script src="js/graphEditor.js"></script>
     <script>
       myCanvas.width = 500;
@@ -42,15 +43,14 @@
       ];
 
       const graph = new Graph(points, segments);
-      const graphEditor = new GraphEditor(myCanvas, graph);
+      const viewPort = new ViewPort(myCanvas);
+      const graphEditor = new GraphEditor(viewPort, graph);
 
       animate();
 
       function animate() {
-        ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
-
+        viewPort.reset();
         graphEditor.display();
-
         requestAnimationFrame(animate);
       }
 

@@ -1,12 +1,12 @@
 class GraphEditor {
-  constructor(canvas, graph) {
-    this.canvas = canvas;
+  constructor(viewPort, graph) {
+    this.viewPort = viewPort;
+    this.canvas = viewPort.canvas;
     this.graph = graph;
-    this.context = canvas.getContext("2d");
+    this.context = viewPort.context;
     this.selected = null;
     this.hovered = null;
     this.dragging = false;
-    this.metaKeyActive = false;
     this.mouse = null;
 
     this.#addEventListeners();
@@ -28,18 +28,8 @@ class GraphEditor {
     );
 
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Meta") {
-        this.metaKeyActive = true;
-      }
-
       if (event.key == "Escape") {
         this.selected = null;
-      }
-    });
-
-    document.addEventListener("keyup", (event) => {
-      if (event.key === "Meta") {
-        this.metaKeyActive = false;
       }
     });
   }
@@ -54,13 +44,9 @@ class GraphEditor {
       }
     }
 
-    if (event.button == 1 || (event.button == 0 && this.metaKeyActive)) {
-      this.dragging = true;
-    }
-
-    if (event.button == 0) {
+    if (event.button == 0 && !this.viewPort.metaKeyActive) {
       // left click
-      const mouse = new Point(event.offsetX, event.offsetY);
+      const mouse = this.viewPort.getMouse(event);
 
       if (this.hovered) {
         this.#selectPoint(this.hovered);
@@ -77,8 +63,12 @@ class GraphEditor {
   };
 
   #handleMouseMove = (event) => {
-    this.mouse = new Point(event.offsetX, event.offsetY);
-    this.hovered = getNearestPoint(this.mouse, this.graph.points, 15);
+    this.mouse = this.viewPort.getMouse(event, true);
+    this.hovered = getNearestPoint(
+      this.mouse,
+      this.graph.points,
+      15 * this.viewPort.zoom
+    );
     if (this.dragging && this.selected) {
       this.selected.x = this.mouse.x;
       this.selected.y = this.mouse.y;
@@ -107,7 +97,7 @@ class GraphEditor {
       this.selected.draw(this.context, { outline: true });
     }
 
-    if (this.hovered && this.selected && !this.hovered.equals(this.selected)) {
+    if (this.hovered) {
       this.hovered.draw(this.context, { fill: true });
     }
   }
