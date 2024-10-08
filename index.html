@@ -8,11 +8,8 @@
     <h1>World Editor</h1>
     <canvas id="myCanvas"></canvas>
     <div id="controls">
-      <button onclick="addRandomPoint()">Add point</button>
-      <button onclick="addRandomSegment()">Add Segment</button>
-      <button onclick="removeRandomPoint()">Remove Point</button>
-      <button onclick="removeRandomSegment()">Remove Segment</button>
-      <button onclick="reset()">Clear All</button>
+      <button onclick="save()">Save</button>
+      <button onclick="reset()">Reset</button>
     </div>
 
     <script src="js/math/primitives/point.js"></script>
@@ -27,22 +24,11 @@
 
       const ctx = myCanvas.getContext("2d");
 
-      const points = [
-        new Point(100, 200),
-        new Point(50, 20),
-        new Point(200, 200),
-        new Point(200, 100),
-        new Point(300, 100),
-        new Point(50, 100),
-      ];
-
-      const segments = [
-        new Segment(points[0], points[2]),
-        new Segment(points[0], points[3]),
-        new Segment(points[1], points[3]),
-      ];
-
-      const graph = new Graph(points, segments);
+      const graphString = localStorage.getItem("graph");
+      const graphInfo = graphString
+        ? JSON.parse(localStorage.getItem("graph"))
+        : null;
+      const graph = graphInfo ? Graph.load(graphInfo) : new Graph();
       const viewPort = new ViewPort(myCanvas);
       const graphEditor = new GraphEditor(viewPort, graph);
 
@@ -95,7 +81,11 @@
       }
 
       function reset() {
-        graph.reset();
+        graphEditor.reset();
+      }
+
+      function save() {
+        graphEditor.save();
       }
     </script>
   </body>

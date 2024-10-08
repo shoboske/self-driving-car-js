@@ -101,4 +101,14 @@ class GraphEditor {
       this.hovered.draw(this.context, { fill: true });
     }
   }
+
+  reset() {
+    this.graph.reset();
+    this.selected = null;
+    this.hovered = null;
+  }
+
+  save() {
+    localStorage.setItem("graph", JSON.stringify(this.graph));
+  }
 }
