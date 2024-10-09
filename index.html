@@ -42,6 +42,7 @@
       function animate() {
         viewPort.reset();
         graphEditor.display();
+        world.generate();
         world.draw(ctx);
         requestAnimationFrame(animate);
       }
