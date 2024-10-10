@@ -6,11 +6,12 @@ class Point {
 
   draw(
     ctx,
-    { size = 18, color = "black", outline = false, fill = false } = {}
+    { size = 18, color = "black", outline = false, fill = false, transparency = 0.5 } = {}
   ) {
     const rad = size / 2;
     ctx.beginPath();
     ctx.fillStyle = color;
+    ctx.globalAlpha = transparency;
     ctx.arc(this.x, this.y, rad, 0, Math.PI * 2);
     ctx.fill();
 

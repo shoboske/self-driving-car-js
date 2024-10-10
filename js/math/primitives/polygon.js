@@ -89,7 +89,7 @@ class Polygon {
 
    draw(
       ctx,
-      { stroke = "blue", lineWidth = 2, fill = "rgba(0,0,255,0.3)" } = {}
+      { stroke = "blue", lineWidth = 2, fill = "rgba(0,0,255,0.3)", transparency = 1 } = {}
    ) {
       ctx.beginPath();
       ctx.fillStyle = fill;

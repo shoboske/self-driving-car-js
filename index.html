@@ -22,8 +22,8 @@
     <script src="js/graphEditor.js"></script>
     <script src="js/world.js"></script>
     <script>
-      myCanvas.width = 600;
-      myCanvas.height = 600;
+      myCanvas.width = 900;
+      myCanvas.height = 900;
 
       const ctx = myCanvas.getContext("2d");
 
@@ -41,9 +41,9 @@
 
       function animate() {
         viewPort.reset();
-        graphEditor.display();
         world.generate();
         world.draw(ctx);
+        graphEditor.display();
         requestAnimationFrame(animate);
       }
 
