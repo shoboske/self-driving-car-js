@@ -37,11 +37,15 @@
 
       const world = new World(graph)
 
+      let oldGraphHash = graph.hash();
       animate();
 
       function animate() {
         viewPort.reset();
-        world.generate();
+        if (graph.hash() != oldGraphHash) {
+          world.generate();
+          oldGraphHash = graph.hash();
+        }
         world.draw(ctx);
         graphEditor.display();
         requestAnimationFrame(animate);
